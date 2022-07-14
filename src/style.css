@@ -1,0 +1,305 @@
+html,
+body,
+#app {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+:root {
+  --base-color: #776e65;
+  --map-color: #bbada0;
+  --map-box-color: rgba(238, 228, 218, 0.35);
+  --background-color-2: #eee4da;
+  --background-color-4: #ebe0c8;
+  --background-color-8: #ecb078;
+  --background-color-16: #ed9461;
+  --background-color-32: #ec7b5c;
+  --background-color-64: #eb5c36;
+  --background-color-128: #f0d86a;
+  --background-color-256: #edd049;
+  --background-color-512: #e1c023;
+  --background-color-1024: #d9b823;
+  --background-color-2028: #d1b123;
+  --font-color-2: #766e65;
+  --font-color-4: #766e65;
+  --font-color-8: #fff;
+  --font-color-16: #fff;
+  --font-color-32: #fff;
+  --font-color-64: #fff;
+  --font-color-128: #fff;
+  --font-color-256: #fff;
+  --font-color-512: #fff;
+  --font-color-1024: #fff;
+  --font-color-2048: #fff;
+}
+.index-3 {
+  z-index: 3;
+}
+.card {
+  position: absolute;
+  height: calc(395px / 4);
+  width: calc(395px / 4);
+  transition-property: top, left;
+  transition-duration: 0.15s;
+  z-index: 4;
+}
+.card-2 {
+  color: var(--font-color-2);
+  background-color: var(--background-color-2);
+  animation: card-init 0.5s;
+
+}
+.card-2::after {
+  content: '2';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+  font-size: 55px;
+  animation: card-font 0.5s;
+}
+.card-4 {
+  color: var(--font-color-4);
+  background-color: var(--background-color-4);
+  animation: big 0.3s;
+}
+.card-4::after {
+  content: '4';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+  font-size: 55px;
+}
+.card-8 {
+  color: var(--font-color-8);
+  background-color: var(--background-color-8);
+  animation: big 0.3s;
+}
+.card-8::after {
+  content: '8';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+  font-size: 55px;
+}
+.card-16 {
+  color: var(--font-color-16);
+  background-color: var(--background-color-16);
+  animation: big 0.3s;
+}
+.card-16::after {
+  content: '16';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+  font-size: 55px;
+}
+.card-32 {
+  color: var(--font-color-32);
+  background-color: var(--background-color-32);
+  animation: big 0.3s;
+}
+.card-32::after {
+  content: '32';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+  font-size: 55px;
+}
+.card-64 {
+  color: var(--font-color-64);
+  background-color: var(--background-color-64);
+  animation: big 0.3s;
+}
+.card-64::after {
+  content: '64';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+  font-size: 55px;
+}
+.card-128 {
+  color: var(--font-color-128);
+  background-color: var(--background-color-128);
+  animation: big 0.3s;
+}
+.card-128::after {
+  content: '128';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+  font-size: 45px;
+}
+.card-256 {
+  color: var(--font-color-256);
+  background-color: var(--background-color-256);
+  animation: big 0.3s;
+}
+.card-256::after {
+  content: '256';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+  font-size: 45px;
+}
+.card-512 {
+  color: var(--font-color-512);
+  background-color: var(--background-color-512);
+  animation: big 0.3s;
+}
+.card-512::after {
+  content: '512';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+  font-size: 45px;
+}
+.card-1024 {
+  color: var(--font-color-1024);
+  background-color: var(--background-color-1024);
+  animation: big 0.3s;
+}
+.card-1024::after {
+  content: '1024';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+  font-size: 35px;
+}
+.card-2048 {
+  color: var(--font-color-2048);
+  background-color: var(--background-color-2028);
+  animation: big 0.3s;
+}
+.card-2048::after {
+  content: '2048';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+  font-size: 35px;
+}
+.position-1-1 {
+  left: calc(15px + (98.75px + 15px) * 0);
+  top: calc(15px + (98.75px + 15px) * 0);
+}
+.position-1-2 {
+  left: calc(15px + (98.75px + 15px) * 1);
+  top: calc(15px + (98.75px + 15px) * 0);
+}
+.position-1-3 {
+  left: calc(15px + (98.75px + 15px) * 2);
+  top: calc(15px + (98.75px + 15px) * 0);
+}
+.position-1-4 {
+  left: calc(15px + (98.75px + 15px) * 3);
+  top: calc(15px + (98.75px + 15px) * 0);
+}
+.position-2-1 {
+  left: calc(15px + (98.75px + 15px) * 0);
+  top: calc(15px + (98.75px + 15px) * 1);
+}
+.position-2-2 {
+  left: calc(15px + (98.75px + 15px) * 1);
+  top: calc(15px + (98.75px + 15px) * 1);
+}
+.position-2-3 {
+  left: calc(15px + (98.75px + 15px) * 2);
+  top: calc(15px + (98.75px + 15px) * 1);
+}
+.position-2-4 {
+  left: calc(15px + (98.75px + 15px) * 3);
+  top: calc(15px + (98.75px + 15px) * 1);
+}
+.position-3-1 {
+  left: calc(15px + (98.75px + 15px) * 0);
+  top: calc(15px + (98.75px + 15px) * 2);
+}
+.position-3-2 {
+  left: calc(15px + (98.75px + 15px) * 1);
+  top: calc(15px + (98.75px + 15px) * 2);
+}
+.position-3-3 {
+  left: calc(15px + (98.75px + 15px) * 2);
+  top: calc(15px + (98.75px + 15px) * 2);
+}
+.position-3-4 {
+  left: calc(15px + (98.75px + 15px) * 3);
+  top: calc(15px + (98.75px + 15px) * 2);
+}
+.position-4-1 {
+  left: calc(15px + (98.75px + 15px) * 0);
+  top: calc(15px + (98.75px + 15px) * 3);
+}
+.position-4-2 {
+  left: calc(15px + (98.75px + 15px) * 1);
+  top: calc(15px + (98.75px + 15px) * 3);
+}
+.position-4-3 {
+  left: calc(15px + (98.75px + 15px) * 2);
+  top: calc(15px + (98.75px + 15px) * 3);
+}
+.position-4-4 {
+  left: calc(15px + (98.75px + 15px) * 3);
+  top: calc(15px + (98.75px + 15px) * 3);
+}
+
+@keyframes card-init {
+  0% {
+    height: 0;
+    width: 0;
+    margin: calc(98.75px / 2) calc(98.75px / 2);
+  }
+  100% {
+    height: calc(395px / 4);
+    width: calc(395px / 4);
+    margin: 0;
+  }
+}
+
+@keyframes card-font {
+  0% {
+    font-size: 0;
+    font-weight: 100;
+  }
+  100% {
+    font-size: 55px;
+    font-weight: bold;
+  }
+}
+@keyframes big {
+  0% {
+    transform: scale(1);
+  }
+  80% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
