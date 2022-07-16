@@ -67,7 +67,6 @@ body,
 .card-4 {
   color: var(--font-color-4);
   background-color: var(--background-color-4);
-  animation: big 0.3s;
 }
 .card-4::after {
   content: '4';
@@ -81,7 +80,6 @@ body,
 .card-8 {
   color: var(--font-color-8);
   background-color: var(--background-color-8);
-  animation: big 0.3s;
 }
 .card-8::after {
   content: '8';
@@ -95,7 +93,6 @@ body,
 .card-16 {
   color: var(--font-color-16);
   background-color: var(--background-color-16);
-  animation: big 0.3s;
 }
 .card-16::after {
   content: '16';
@@ -109,7 +106,6 @@ body,
 .card-32 {
   color: var(--font-color-32);
   background-color: var(--background-color-32);
-  animation: big 0.3s;
 }
 .card-32::after {
   content: '32';
@@ -123,7 +119,6 @@ body,
 .card-64 {
   color: var(--font-color-64);
   background-color: var(--background-color-64);
-  animation: big 0.3s;
 }
 .card-64::after {
   content: '64';
@@ -137,7 +132,6 @@ body,
 .card-128 {
   color: var(--font-color-128);
   background-color: var(--background-color-128);
-  animation: big 0.3s;
 }
 .card-128::after {
   content: '128';
@@ -151,7 +145,6 @@ body,
 .card-256 {
   color: var(--font-color-256);
   background-color: var(--background-color-256);
-  animation: big 0.3s;
 }
 .card-256::after {
   content: '256';
@@ -165,7 +158,6 @@ body,
 .card-512 {
   color: var(--font-color-512);
   background-color: var(--background-color-512);
-  animation: big 0.3s;
 }
 .card-512::after {
   content: '512';
@@ -179,7 +171,6 @@ body,
 .card-1024 {
   color: var(--font-color-1024);
   background-color: var(--background-color-1024);
-  animation: big 0.3s;
 }
 .card-1024::after {
   content: '1024';
@@ -193,7 +184,6 @@ body,
 .card-2048 {
   color: var(--font-color-2048);
   background-color: var(--background-color-2028);
-  animation: big 0.3s;
 }
 .card-2048::after {
   content: '2048';
@@ -203,6 +193,9 @@ body,
   transform: translate(-50%, -50%);
   font-weight: bold;
   font-size: 35px;
+}
+.big {
+  animation: big 0.3s;
 }
 .position-1-1 {
   left: calc(15px + (98.75px + 15px) * 0);

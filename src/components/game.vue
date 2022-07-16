@@ -30,15 +30,55 @@
     <div ref="gameoverButton" class="gameover">
       <div @click="anewGame">从新开始</div>
     </div>
+    <audio ref="mergeMP3" src="https://app464.acapp.acwing.com.cn:20443/static/mp3/bo.mp3"></audio>
+    <audio ref="noMP3" src="https://app464.acapp.acwing.com.cn:20443/static/mp3/du.mp3"></audio>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { onMounted, onUnmounted, ref } from 'vue'
 import { empty, direction } from './game.type'
+const props = defineProps<{
+  musicState: boolean
+}>()
+const emit = defineEmits<{
+  (event: 'ongameover'): void
+}>()
+
+const grade = ref(0)
 const cardContent = ref<HTMLDivElement>()
 const gameoverButton = ref<HTMLDivElement>()
+const mergeMP3 = ref<HTMLAudioElement>()
+const noMP3 = ref<HTMLAudioElement>()
 const map: number[][] = Array.from(new Array(5), () => new Array(5).fill(0))
+
+let gameIsOver = false
+const searchOneEmpty = (): false | empty => {
+  let empty: empty[] = []
+  for (let i = 1; i <= 4; i++) {
+    for (let j = 1; j <= 4; j++) {
+      if (map[i][j] === 0) {
+        empty.push([i, j])
+      }
+    }
+  }
+  if (empty.length < 1) return false
+  else {
+    let index1 = Math.floor(Math.random() * empty.length)
+    return empty[index1]
+  }
+}
+const mapAddOneNumber = (): void => {
+  let empty = searchOneEmpty()
+  if (empty === false) {
+    gameover()
+    return
+  }
+  map[empty[0]][empty[1]] = 2
+  const box1 = document.createElement('div')
+  box1.classList.add('card', 'card-2', `position-${empty[0]}-${empty[1]}`)
+  cardContent.value?.appendChild(box1)
+}
 const searchTwoEmpty = (): false | empty[] => {
   let empty: empty[] = []
   for (let i = 1; i <= 4; i++) {
@@ -58,8 +98,9 @@ const searchTwoEmpty = (): false | empty[] => {
 }
 const gameover = (): void => {
   if (gameoverButton.value) gameoverButton.value.style.display = 'flex'
+  gameIsOver = true
 }
-const mapAddNumber = (): void => {
+const mapAddTowNumber = (): void => {
   let empty = searchTwoEmpty()
   if (empty === false) {
     gameover()
@@ -76,8 +117,8 @@ const mapAddNumber = (): void => {
 }
 const moveCardOnDirection = (d: direction): void => {
   if (d === direction.up) {
-    for (let i = 1; i <= 4; i++) {
-      for (let j = 2; j <= 4; j++) {
+    for (let i = 1; i <= map.length - 1; i++) {
+      for (let j = 2; j <= map.length - 1; j++) {
         if (map[j][i] !== 0 && map[j - 1][i] === 0) {
           let t = j
           let dom = document.querySelector(`.position-${j}-${i}`)
@@ -93,8 +134,8 @@ const moveCardOnDirection = (d: direction): void => {
     }
     return
   } else if (d === direction.left) {
-    for (let i = 1; i <= 4; i++) {
-      for (let j = 2; j <= 4; j++) {
+    for (let i = 1; i <= map.length - 1; i++) {
+      for (let j = 2; j <= map.length - 1; j++) {
         if (map[i][j] !== 0 && map[i][j - 1] === 0) {
           let t = j
           let dom = document.querySelector(`.position-${i}-${j}`)
@@ -111,8 +152,8 @@ const moveCardOnDirection = (d: direction): void => {
 
     return
   } else if (d === direction.down) {
-    for (let i = 1; i <= 4; i++) {
-      for (let j = 3; j >= 1; j--) {
+    for (let i = 1; i <= map.length - 1; i++) {
+      for (let j = map.length - 2; j >= 1; j--) {
         if (map[j][i] !== 0 && map[j + 1][i] === 0) {
           let t = j
           let dom = document.querySelector(`.position-${j}-${i}`)
@@ -128,8 +169,8 @@ const moveCardOnDirection = (d: direction): void => {
     }
     return
   } else if (d === direction.right) {
-    for (let i = 1; i <= 4; i++) {
-      for (let j = 3; j >= 1; j--) {
+    for (let i = 1; i <= map.length - 1; i++) {
+      for (let j = map.length - 2; j >= 1; j--) {
         if (map[i][j] !== 0 && map[i][j + 1] === 0) {
           let t = j
           let dom = document.querySelector(`.position-${i}-${j}`)
@@ -147,118 +188,210 @@ const moveCardOnDirection = (d: direction): void => {
   }
 }
 const cardMerge = (d: direction): void => {
+  let hasMerge = false
   if (d === direction.up) {
-    for (let i = 1; i <= 4; i++) {
-      for (let j = 2; j <= 4; j++) {
-        if (map[j][i] === map[j - 1][i]) {
-          let dom = document.querySelector(`.position-${j - 1}-${i}`)
-          let deleteDom = document.querySelector(`.position-${j}-${i}`)
+    for (let i = 1; i <= map.length - 1; i++) {
+      for (let j = 2; j <= map.length - 1; j++) {
+        if (map[j][i] === map[j - 1][i] && map[j][i + 1] !== 0) {
+          let dom: HTMLDivElement | null = document.querySelector(`.position-${j - 1}-${i}`)
+          let deleteDom: HTMLDivElement | null = document.querySelector(`.position-${j}-${i}`)
           dom?.classList.remove(`card-${map[j - 1][i]}`)
           dom?.classList.add(`card-${map[j - 1][i] + map[j - 1][i]}`)
-          // deleteDom?.classList.add('index-3')
-          // deleteDom?.classList.add(`position-${j - 1}-${i}`)
-          // setTimeout(() => {
-          deleteDom && cardContent.value?.removeChild(deleteDom)
-          // }, 150)
+          dom?.classList.toggle('big')
+          grade.value += map[j - 1][i] * 2
+
+          setTimeout(() => {
+            dom?.classList.toggle('big')
+          }, 300)
+          if (deleteDom) {
+            deleteDom.classList.remove(`position-${j}-${i}`)
+            let top = 15 + (98.75 + 15) * (j - 2) + 'px'
+            let left = 15 + (98.75 + 15) * (i - 1) + 'px'
+            deleteDom.style.top = top
+            deleteDom.style.left = left
+            deleteDom.style.zIndex = '3'
+          }
+          setTimeout(() => {
+            deleteDom && cardContent.value?.removeChild(deleteDom)
+          }, 100)
           map[j - 1][i] = map[j - 1][i] + map[j - 1][i]
           map[j][i] = 0
+          hasMerge = true
         }
       }
     }
-    return
   } else if (d === direction.left) {
-    for (let i = 1; i <= 4; i++) {
-      for (let j = 2; j <= 4; j++) {
-        if (map[i][j] === map[i][j - 1]) {
-          let dom = document.querySelector(`.position-${i}-${j - 1}`)
-          let deleteDom = document.querySelector(`.position-${i}-${j}`)
+    for (let i = 1; i <= map.length - 1; i++) {
+      for (let j = 2; j <= map.length - 1; j++) {
+        if (map[i][j] === map[i][j - 1] && map[i][j] !== 0) {
+          let dom: HTMLDivElement | null = document.querySelector(`.position-${i}-${j - 1}`)
+          let deleteDom: HTMLDivElement | null = document.querySelector(`.position-${i}-${j}`)
           dom?.classList.remove(`card-${map[i][j - 1]}`)
           dom?.classList.add(`card-${map[i][j - 1] + map[i][j - 1]}`)
-          // deleteDom?.classList.add('index-3')
-          // deleteDom?.classList.add(`position-${i}-${j - 1}`)
-          // setTimeout(() => {
-          deleteDom && cardContent.value?.removeChild(deleteDom)
-          // }, 150)
+          dom?.classList.toggle('big')
+          grade.value += map[i][j - 1] * 2
+          setTimeout(() => {
+            dom?.classList.toggle('big')
+          }, 300)
+          if (deleteDom) {
+            deleteDom.classList.remove(`position-${i}-${j}`)
+            let top = 15 + (98.75 + 15) * (i - 1) + 'px'
+            let left = 15 + (98.75 + 15) * (j - 2) + 'px'
+            deleteDom.style.top = top
+            deleteDom.style.left = left
+            deleteDom.style.zIndex = '3'
+          }
+          setTimeout(() => {
+            deleteDom && cardContent.value?.removeChild(deleteDom)
+          }, 100)
           map[i][j - 1] = map[i][j - 1] + map[i][j - 1]
           map[i][j] = 0
+          hasMerge = true
         }
       }
     }
-
-    return
   } else if (d === direction.down) {
-    for (let i = 1; i <= 4; i++) {
-      for (let j = 3; j >= 1; j--) {
-        if (map[j][i] === map[j + 1][i]) {
-          let dom = document.querySelector(`.position-${j + 1}-${i}`)
-          let deleteDom = document.querySelector(`.position-${j}-${i}`)
+    for (let i = 1; i <= map.length - 1; i++) {
+      for (let j = map.length - 2; j >= 1; j--) {
+        if (map[j][i] === map[j + 1][i] && map[j][i] !== 0) {
+          let dom: HTMLDivElement | null = document.querySelector(`.position-${j + 1}-${i}`)
+          let deleteDom: HTMLDivElement | null = document.querySelector(`.position-${j}-${i}`)
           dom?.classList.remove(`card-${map[j + 1][i]}`)
           dom?.classList.add(`card-${map[j + 1][i] + map[j + 1][i]}`)
-          // deleteDom?.classList.add('index-3')
-          // deleteDom?.classList.add(`position-${j + 1}-${i}`)
-          // setTimeout(() => {
-          deleteDom && cardContent.value?.removeChild(deleteDom)
-          // }, 150)
+          dom?.classList.toggle('big')
+          grade.value += map[j + 1][i] * 2
+          setTimeout(() => {
+            dom?.classList.toggle('big')
+          }, 300)
+          if (deleteDom) {
+            deleteDom.classList.remove(`position-${j}-${i}`)
+            let top = 15 + (98.75 + 15) * j + 'px'
+            let left = 15 + (98.75 + 15) * (i - 1) + 'px'
+            deleteDom.style.top = top
+            deleteDom.style.left = left
+            deleteDom.style.zIndex = '3'
+          }
+          setTimeout(() => {
+            deleteDom && cardContent.value?.removeChild(deleteDom)
+          }, 100)
           map[j + 1][i] = map[j + 1][i] + map[j + 1][i]
           map[j][i] = 0
+          hasMerge = true
         }
       }
     }
-    return
   } else if (d === direction.right) {
-    for (let i = 1; i <= 4; i++) {
-      for (let j = 3; j >= 1; j--) {
-        if (map[i][j] === map[i][j + 1]) {
-          let dom = document.querySelector(`.position-${i}-${j + 1}`)
-          let deleteDom = document.querySelector(`.position-${i}-${j}`)
+    for (let i = 1; i <= map.length - 1; i++) {
+      for (let j = map.length - 2; j >= 1; j--) {
+        if (map[i][j] === map[i][j + 1] && map[i][j] !== 0) {
+          let dom: HTMLDivElement | null = document.querySelector(`.position-${i}-${j + 1}`)
+          let deleteDom: HTMLDivElement | null = document.querySelector(`.position-${i}-${j}`)
           dom?.classList.remove(`card-${map[i][j + 1]}`)
           dom?.classList.add(`card-${map[i][j + 1] + map[i][j + 1]}`)
-          // deleteDom?.classList.add('index-3')
-          // deleteDom?.classList.add(`position-${i}-${j + 1}`)
-          // setTimeout(() => {
-          deleteDom && cardContent.value?.removeChild(deleteDom)
-          // }, 150)
+          dom?.classList.toggle('big')
+          grade.value += map[i][j + 1] * 2
+          setTimeout(() => {
+            dom?.classList.toggle('big')
+          }, 300)
+          if (deleteDom) {
+            deleteDom.classList.remove(`position-${i}-${j}`)
+            let top = 15 + (98.75 + 15) * (i - 1) + 'px'
+            let left = 15 + (98.75 + 15) * j + 'px'
+            deleteDom.style.top = top
+            deleteDom.style.left = left
+            deleteDom.style.zIndex = '3'
+          }
+          setTimeout(() => {
+            deleteDom && cardContent.value?.removeChild(deleteDom)
+          }, 100)
           map[i][j + 1] = map[i][j + 1] + map[i][j + 1]
           map[i][j] = 0
+          hasMerge = true
         }
       }
     }
-    return
+  }
+
+  if (hasMerge && mergeMP3.value && props.musicState) {
+    mergeMP3.value.currentTime = 0
+    mergeMP3.value.play()
   }
 }
-const moveCard = (d: direction) => {
+const moveCard = (d: direction): Promise<boolean> => {
   return new Promise((resolve, reject) => {
+    let mapcopy: number[][] = []
+    for (let i = 0; i < map.length; i++) {
+      let t = [...map[i]]
+      mapcopy.push(t)
+    }
     moveCardOnDirection(d)
     cardMerge(d)
     moveCardOnDirection(d)
     setTimeout(() => {
-      resolve(null)
-    }, 300)
+      let allNotEmpty = true
+      for (let i = 1; i < map.length; i++) {
+        for (let j = 1; j < map.length; j++) {
+          if (mapcopy[i][j] !== map[i][j]) {
+            resolve(true)
+            return
+          }
+          if (map[i][j] === 0) allNotEmpty = false
+        }
+      }
+      if (!allNotEmpty) {
+        if (noMP3.value && !gameIsOver && props.musicState) {
+          noMP3.value.currentTime = 0
+          noMP3.value.play()
+        }
+
+        console.log('还有空位')
+        resolve(false)
+        return
+      }
+      let x = [0, 1, 0, -1],
+        y = [-1, 0, 1, 0]
+      for (let i = 1; i < map.length; i++) {
+        for (let j = 1; j < map.length; j++) {
+          for (let z = 0; z < 4; z++) {
+            let tx = i + x[z],
+              ty = j + y[z]
+            if (tx < 1 || tx === map.length || ty < 1 || ty === map.length) continue
+            if (map[tx][ty] === map[i][j]) {
+              console.log('还可以走一步')
+
+              resolve(false)
+              return
+            }
+          }
+        }
+      }
+      resolve(true)
+    }, 0)
   })
 }
 const handleKey = async (e: any) => {
+  let dir: direction | null = null
   switch (e.key) {
     case 'w': {
-      await moveCard(direction.up)
-      mapAddNumber()
+      dir = direction.up
       break
     }
     case 's': {
-      await moveCard(direction.down)
-      mapAddNumber()
+      dir = direction.down
 
       break
     }
     case 'a': {
-      await moveCard(direction.left)
-      mapAddNumber()
+      dir = direction.left
       break
     }
     case 'd': {
-      await moveCard(direction.right)
-      mapAddNumber()
+      dir = direction.right
       break
     }
+  }
+  if (dir !== null) {
+    ;(await moveCard(dir)) && mapAddOneNumber()
   }
 }
 const anewGame = () => {
@@ -269,17 +402,28 @@ const anewGame = () => {
       map[i].fill(0)
     }
   }
-  mapAddNumber()
+  let localGrage = localStorage.getItem('2048Grage')
+  if (localGrage) {
+    let t = parseInt(localGrage)
+    if (t < grade.value) localStorage.setItem('2048Grage', grade.value + '')
+    emit('ongameover')
+  } else {
+    localStorage.setItem('2048Grage', grade.value + '')
+  }
+  grade.value = 0
+  gameIsOver = false
+  mapAddTowNumber()
 }
 window.addEventListener('keydown', handleKey, false)
 onMounted(() => {
-  mapAddNumber()
+  mapAddTowNumber()
 })
 onUnmounted(() => {
   window.removeEventListener('keydown', handleKey, false)
 })
 defineExpose({
   anewGame,
+  grade,
 })
 </script>
 
@@ -294,7 +438,7 @@ defineExpose({
 .row {
   height: calc(395px / 4);
   width: 100%;
-  margin-bottom: 15px;
+  margin: 0 0 15px 0;
 }
 .col {
   height: 100%;
