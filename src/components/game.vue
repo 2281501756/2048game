@@ -28,23 +28,31 @@
     </div>
     <div ref="cardContent" class="card-content"></div>
     <div ref="gameoverButton" class="gameover">
-      <div @click="anewGame">从新开始</div>
+      <div class="gameover-box">
+        <div>GAME OVER</div>
+        <div>得分：{{ grade }}</div>
+      </div>
+      <div class="gameover-button" @click="anewGame(true)">从新开始</div>
     </div>
-    <audio ref="mergeMP3" src="https://app464.acapp.acwing.com.cn:20443/static/mp3/bo.mp3"></audio>
-    <audio ref="noMP3" src="https://app464.acapp.acwing.com.cn:20443/static/mp3/du.mp3"></audio>
+    <audio ref="mergeMP3" src="https://app464.acapp.acwing.com.cn:20443/mp3/bo.mp3"></audio>
+    <audio ref="noMP3" src="https://app464.acapp.acwing.com.cn:20443/mp3/du.mp3"></audio>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { onMounted, onUnmounted, ref } from 'vue'
 import { empty, direction } from './game.type'
+import axios from 'axios'
 const props = defineProps<{
   musicState: boolean
+  game_add_event: () => void
+  game_remove_event: () => void
 }>()
 const emit = defineEmits<{
   (event: 'ongameover'): void
 }>()
 
+const { game_add_event, game_remove_event } = props
 const grade = ref(0)
 const cardContent = ref<HTMLDivElement>()
 const gameoverButton = ref<HTMLDivElement>()
@@ -74,9 +82,19 @@ const mapAddOneNumber = (): void => {
     gameover()
     return
   }
-  map[empty[0]][empty[1]] = 2
+  let random = Math.random()
+  if (random < 1 / 16) {
+    newRandomCard(empty[0], empty[1], 8)
+  } else if (random < 3 / 16) {
+    newRandomCard(empty[0], empty[1], 4)
+  } else {
+    newRandomCard(empty[0], empty[1], 2)
+  }
+}
+const newRandomCard = (x: number, y: number, z: number): void => {
+  map[x][y] = z
   const box1 = document.createElement('div')
-  box1.classList.add('card', 'card-2', `position-${empty[0]}-${empty[1]}`)
+  box1.classList.add('card', `card-${z}`, `position-${x}-${y}`, 'init')
   cardContent.value?.appendChild(box1)
 }
 const searchTwoEmpty = (): false | empty[] => {
@@ -99,6 +117,8 @@ const searchTwoEmpty = (): false | empty[] => {
 const gameover = (): void => {
   if (gameoverButton.value) gameoverButton.value.style.display = 'flex'
   gameIsOver = true
+  game_remove_event()
+  upload_grade()
 }
 const mapAddTowNumber = (): void => {
   let empty = searchTwoEmpty()
@@ -192,7 +212,7 @@ const cardMerge = (d: direction): void => {
   if (d === direction.up) {
     for (let i = 1; i <= map.length - 1; i++) {
       for (let j = 2; j <= map.length - 1; j++) {
-        if (map[j][i] === map[j - 1][i] && map[j][i + 1] !== 0) {
+        if (map[j][i] === map[j - 1][i] && map[j][i] !== 0) {
           let dom: HTMLDivElement | null = document.querySelector(`.position-${j - 1}-${i}`)
           let deleteDom: HTMLDivElement | null = document.querySelector(`.position-${j}-${i}`)
           dom?.classList.remove(`card-${map[j - 1][i]}`)
@@ -389,12 +409,33 @@ const handleKey = async (e: any) => {
       dir = direction.right
       break
     }
+    case 'ArrowUp': {
+      e.preventDefault()
+      dir = direction.up
+      break
+    }
+    case 'ArrowLeft': {
+      e.preventDefault()
+      dir = direction.left
+      break
+    }
+    case 'ArrowRight': {
+      e.preventDefault()
+      dir = direction.right
+      break
+    }
+    case 'ArrowDown': {
+      e.preventDefault()
+      dir = direction.down
+      break
+    }
   }
   if (dir !== null) {
     ;(await moveCard(dir)) && mapAddOneNumber()
   }
 }
-const anewGame = () => {
+const anewGame = (fromGameOver: boolean = false) => {
+  game_add_event()
   if (gameoverButton.value) gameoverButton.value.style.display = 'none'
   if (cardContent.value) {
     cardContent.value.innerHTML = ''
@@ -410,24 +451,41 @@ const anewGame = () => {
   } else {
     localStorage.setItem('2048Grage', grade.value + '')
   }
+  if (grade.value !== 0 && !fromGameOver) {
+    upload_grade()
+    console.log('上传成绩')
+  }
   grade.value = 0
   gameIsOver = false
   mapAddTowNumber()
 }
-window.addEventListener('keydown', handleKey, false)
+
+const upload_grade = () => {
+  axios.post('https://app464.acapp.acwing.com.cn:20443/2048/list', {
+    data: {
+      user_name: window.user.username,
+      photo: window.user.photo,
+      score: grade.value,
+      openid: window.user.openid,
+    },
+  })
+}
+
 onMounted(() => {
   mapAddTowNumber()
+  game_add_event()
 })
 onUnmounted(() => {
-  window.removeEventListener('keydown', handleKey, false)
+  game_remove_event()
 })
 defineExpose({
   anewGame,
+  handleKey,
   grade,
 })
 </script>
 
-<style scoped>
+<style scoped lang="less">
 .game {
   height: 100%;
   width: 100%;
@@ -468,21 +526,32 @@ defineExpose({
   justify-content: center;
   align-items: center;
   display: none;
-}
-.gameover > div {
-  width: 180px;
-  height: 60px;
-  color: white;
-  background-color: var(--base-color);
-  font-size: 30px;
-  text-align: center;
-  letter-spacing: 3px;
-  line-height: 60px;
-  border-radius: 20px;
-  cursor: pointer;
-  user-select: none;
-}
-.gameover > div:active {
-  transform: scale(0.8);
+  flex-direction: column;
+
+  &-box {
+    color: var(--base-color);
+    font-size: 30px;
+    font-weight: 700;
+    margin-top: -30px;
+    margin-bottom: 50px;
+    text-align: center;
+  }
+
+  &-button {
+    width: 180px;
+    height: 60px;
+    color: white;
+    background-color: var(--base-color);
+    font-size: 30px;
+    text-align: center;
+    letter-spacing: 3px;
+    line-height: 60px;
+    border-radius: 20px;
+    cursor: pointer;
+    user-select: none;
+  }
+  &-button:active {
+    transform: scale(0.8);
+  }
 }
 </style>

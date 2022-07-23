@@ -1,9 +1,7 @@
 html,
-body,
-#app {
+body {
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
 }
 * {
   margin: 0;
@@ -51,8 +49,6 @@ body,
 .card-2 {
   color: var(--font-color-2);
   background-color: var(--background-color-2);
-  animation: card-init 0.5s;
-
 }
 .card-2::after {
   content: '2';
@@ -196,6 +192,9 @@ body,
 }
 .big {
   animation: big 0.3s;
+}
+.init {
+  animation: card-init 0.5s;
 }
 .position-1-1 {
   left: calc(15px + (98.75px + 15px) * 0);
