@@ -1,0 +1,361 @@
+html,
+body {
+  width: 100vw;
+  height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+:root {
+  --main-background-color: #faf8ef;
+  --base-color: #776e65;
+  --map-color: #bbada0;
+  --map-box-color: rgba(238, 228, 218, 0.35);
+  --background-color-2: #eee4da;
+  --background-color-4: #ebe0c8;
+  --background-color-8: #ecb078;
+  --background-color-16: #ed9461;
+  --background-color-32: #ec7b5c;
+  --background-color-64: #eb5c36;
+  --background-color-128: #f0d86a;
+  --background-color-256: #edd049;
+  --background-color-512: #e1c023;
+  --background-color-1024: #d9b823;
+  --background-color-2048: #d1b123;
+  --background-color-4096: #e03207;
+  --background-color-8192: #e0283e;
+  --background-color-16384: #e02264;
+  --background-color-32768: #e002b0;
+  --font-color-2: #766e65;
+  --font-color-4: #766e65;
+  --font-color-8: #fff;
+  --font-color-16: #fff;
+  --font-color-32: #fff;
+  --font-color-64: #fff;
+  --font-color-128: #fff;
+  --font-color-256: #fff;
+  --font-color-512: #fff;
+  --font-color-1024: #fff;
+  --font-color-2048: #fff;
+  --card-font-size: 50px;
+  --card-font-weight: 400;
+  --home-background: url('https://cdn.acwing.com/media/article/image/2022/08/05/67937_164d6a2414-wallhaven-z8wl1y.png');
+}
+.index-3 {
+  z-index: 3;
+}
+.card {
+  position: absolute;
+  height: calc(395px / 4);
+  width: calc(395px / 4);
+  transition-property: top, left;
+  transition-duration: 0.15s;
+  border-radius: 5px;
+  z-index: 4;
+}
+.card-2 {
+  color: var(--font-color-2);
+  background-color: var(--background-color-2);
+}
+.card-2::after {
+  content: '2';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: var(--card-font-weight);
+  font-size: var(--card-font-size);
+  animation: card-font 0.5s;
+}
+.card-4 {
+  color: var(--font-color-4);
+  background-color: var(--background-color-4);
+}
+.card-4::after {
+  content: '4';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: var(--card-font-weight);
+  font-size: var(--card-font-size);
+}
+.card-8 {
+  color: var(--font-color-8);
+  background-color: var(--background-color-8);
+}
+.card-8::after {
+  content: '8';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: var(--card-font-weight);
+  font-size: var(--card-font-size);
+}
+.card-16 {
+  color: var(--font-color-16);
+  background-color: var(--background-color-16);
+}
+.card-16::after {
+  content: '16';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: var(--card-font-weight);
+  font-size: var(--card-font-size);
+}
+.card-32 {
+  color: var(--font-color-32);
+  background-color: var(--background-color-32);
+}
+.card-32::after {
+  content: '32';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: var(--card-font-weight);
+  font-size: var(--card-font-size);
+}
+.card-64 {
+  color: var(--font-color-64);
+  background-color: var(--background-color-64);
+}
+.card-64::after {
+  content: '64';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: var(--card-font-weight);
+  font-size: var(--card-font-size);
+}
+.card-128 {
+  color: var(--font-color-128);
+  background-color: var(--background-color-128);
+}
+.card-128::after {
+  content: '128';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: var(--card-font-weight);
+  font-size: calc(var(--card-font-size) * 2 / 3);
+}
+.card-256 {
+  color: var(--font-color-256);
+  background-color: var(--background-color-256);
+}
+.card-256::after {
+  content: '256';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: var(--card-font-weight);
+  font-size: 45px;
+}
+.card-512 {
+  color: var(--font-color-512);
+  background-color: var(--background-color-512);
+}
+.card-512::after {
+  content: '512';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: var(--card-font-weight);
+  font-size: 45px;
+}
+.card-1024 {
+  color: var(--font-color-1024);
+  background-color: var(--background-color-1024);
+}
+.card-1024::after {
+  content: '1024';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: var(--card-font-weight);
+  font-size: 35px;
+}
+.card-2048 {
+  color: var(--font-color-2048);
+  background-color: var(--background-color-2048);
+}
+.card-2048::after {
+  content: '2048';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: var(--card-font-weight);
+  font-size: 35px;
+}
+.card-4096 {
+  color: var(--font-color-2048);
+  background-color: var(--background-color-4096);
+}
+.card-4096::after {
+  content: '4096';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: var(--card-font-weight);
+  font-size: 35px;
+}
+
+.card-8192 {
+  color: var(--font-color-2048);
+  background-color: var(--background-color-8192);
+}
+.card-8192::after {
+  content: '8192';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: var(--card-font-weight);
+  font-size: 35px;
+}
+.card-16384 {
+  color: var(--font-color-2048);
+  background-color: var(--background-color-16384);
+}
+.card-16384::after {
+  content: '16384';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: var(--card-font-weight);
+  font-size: 30px;
+}
+.card-32768 {
+  color: var(--font-color-2048);
+  background-color: var(--background-color-32768);
+}
+.card-32768::after {
+  content: '32768';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: var(--card-font-weight);
+  font-size: 30px;
+}
+.big {
+  animation: big 0.3s cubic-bezier(.67,1,.7,1);
+}
+.init {
+  animation: card-init 0.5s ;
+}
+.position-1-1 {
+  left: calc(15px + (98.75px + 15px) * 0);
+  top: calc(15px + (98.75px + 15px) * 0);
+}
+.position-1-2 {
+  left: calc(15px + (98.75px + 15px) * 1);
+  top: calc(15px + (98.75px + 15px) * 0);
+}
+.position-1-3 {
+  left: calc(15px + (98.75px + 15px) * 2);
+  top: calc(15px + (98.75px + 15px) * 0);
+}
+.position-1-4 {
+  left: calc(15px + (98.75px + 15px) * 3);
+  top: calc(15px + (98.75px + 15px) * 0);
+}
+.position-2-1 {
+  left: calc(15px + (98.75px + 15px) * 0);
+  top: calc(15px + (98.75px + 15px) * 1);
+}
+.position-2-2 {
+  left: calc(15px + (98.75px + 15px) * 1);
+  top: calc(15px + (98.75px + 15px) * 1);
+}
+.position-2-3 {
+  left: calc(15px + (98.75px + 15px) * 2);
+  top: calc(15px + (98.75px + 15px) * 1);
+}
+.position-2-4 {
+  left: calc(15px + (98.75px + 15px) * 3);
+  top: calc(15px + (98.75px + 15px) * 1);
+}
+.position-3-1 {
+  left: calc(15px + (98.75px + 15px) * 0);
+  top: calc(15px + (98.75px + 15px) * 2);
+}
+.position-3-2 {
+  left: calc(15px + (98.75px + 15px) * 1);
+  top: calc(15px + (98.75px + 15px) * 2);
+}
+.position-3-3 {
+  left: calc(15px + (98.75px + 15px) * 2);
+  top: calc(15px + (98.75px + 15px) * 2);
+}
+.position-3-4 {
+  left: calc(15px + (98.75px + 15px) * 3);
+  top: calc(15px + (98.75px + 15px) * 2);
+}
+.position-4-1 {
+  left: calc(15px + (98.75px + 15px) * 0);
+  top: calc(15px + (98.75px + 15px) * 3);
+}
+.position-4-2 {
+  left: calc(15px + (98.75px + 15px) * 1);
+  top: calc(15px + (98.75px + 15px) * 3);
+}
+.position-4-3 {
+  left: calc(15px + (98.75px + 15px) * 2);
+  top: calc(15px + (98.75px + 15px) * 3);
+}
+.position-4-4 {
+  left: calc(15px + (98.75px + 15px) * 3);
+  top: calc(15px + (98.75px + 15px) * 3);
+}
+
+@keyframes card-init {
+  0% {
+    height: 0;
+    width: 0;
+    margin: calc(98.75px / 2) calc(98.75px / 2);
+  }
+  100% {
+    height: calc(395px / 4);
+    width: calc(395px / 4);
+    margin: 0;
+  }
+}
+
+@keyframes card-font {
+  0% {
+    font-size: 0;
+    font-weight: 100;
+  }
+  100% {
+    font-size: 55px;
+    font-weight: var(--card-font-weight);
+  }
+}
+@keyframes big {
+  0% {
+    background-color: #fff;
+    transform: scale(1);
+  }
+  80% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

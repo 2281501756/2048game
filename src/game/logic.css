@@ -1,0 +1,18 @@
+.block {
+  z-index: 4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  transition: all 0.15s;
+}
+
+.block-init {
+  animation: block-init 0.5s;
+}
+
+@keyframes block-init {
+  0% {
+    transform: scale(0);
+  }
+}
