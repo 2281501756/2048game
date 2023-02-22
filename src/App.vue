@@ -36,7 +36,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div ref="root">
+  <div class="root" ref="root">
     <Home v-if="router === 'home'"></Home>
     <comment-mode v-if="router === 'comment'"></comment-mode>
     <nine v-if="router === 'nine'"></nine>
@@ -44,4 +44,8 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.root {
+  height: 100%;
+}
+</style>

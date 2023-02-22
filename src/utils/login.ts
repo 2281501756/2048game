@@ -22,14 +22,6 @@ const login = async () => {
     (600 * 100) / window.innerWidth,
     (670 * 100 * 18) / window.innerHeight / 17
   )
-  // let appbodyDOM: HTMLDivElement | null = document.querySelector('#' + window.game2048id)
-  // let appDOM: HTMLElement | null | undefined = appbodyDOM?.parentElement?.parentElement
-  // if (appDOM) {
-  //   let top = window.innerHeight / 2 - 670 / 2
-  //   let left = window.innerWidth / 2 - 600 / 2
-  //   appDOM.style.left = left + 'px'
-  //   appDOM.style.top = top + 'px'
-  // }
 }
 
 login()

@@ -9,6 +9,9 @@ body {
   padding: 0;
   box-sizing: border-box;
 }
+#app {
+  height: 100%;
+}
 :root {
   --main-background-color: #faf8ef;
   --base-color: #776e65;
